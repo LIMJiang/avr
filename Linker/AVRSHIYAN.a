@@ -1,0 +1,848 @@
+;//#include "avr/io.h"
+;         //包含AVR单片机寄存器定义的头文件
+;         #include <mega16.h>
+;PCODE: $00000000 VOL: 0
+	#ifndef __SLEEP_DEFINED__
+;PCODE: $00000001 VOL: 0
+	#define __SLEEP_DEFINED__
+;PCODE: $00000002 VOL: 0
+	.EQU __se_bit=0x40
+;PCODE: $00000003 VOL: 0
+	.EQU __sm_mask=0xB0
+;PCODE: $00000004 VOL: 0
+	.EQU __sm_powerdown=0x20
+;PCODE: $00000005 VOL: 0
+	.EQU __sm_powersave=0x30
+;PCODE: $00000006 VOL: 0
+	.EQU __sm_standby=0xA0
+;PCODE: $00000007 VOL: 0
+	.EQU __sm_ext_standby=0xB0
+;PCODE: $00000008 VOL: 0
+	.EQU __sm_adc_noise_red=0x10
+;PCODE: $00000009 VOL: 0
+	.SET power_ctrl_reg=mcucr
+;PCODE: $0000000A VOL: 0
+	#endif
+;PCODE: $0000000B VOL: 0
+;PCODE: $0000000C VOL: 0
+;#include "NBCAVR.h"         //包含位操作的头文件
+;
+;#define uchar unsigned char
+;#define uint  unsigned int
+;
+;#define LED_Data  PORTB
+;#define Dataport PORTC
+;#define LED_1 PIOD4
+;#define LED_2 PIOD5
+;#define LED_3 PIOD6
+;#define LED_4 PIOA6
+;
+;#define S1 PIOD2           //定义按键IO
+;#define S2 PIOD0
+;#define S3 PIOD3
+;#define S4 PIOD1
+;#define S5 PIOA7
+;
+;
+;
+;
+;
+;flash char led_7[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+;//flash char position[6]={0xfe,0xfd,0xfb,0xf7,0xef,0xdf};
+;//flash char position[4]={0xff,0xbf,0xdf,0xef};
+;flash char position[4]={0xc3,0xc3,0xa3,0x93};
+;flash char positiona[4]={0x43,0x03,0x03,0x03};                                      // 位选PORTA
+;uchar resit[8]={0x7F, 0xBF, 0xDF, 0xEF, 0xF7, 0xFB, 0xFD, 0xFE};
+
+	.DSEG
+;
+;int i=0;
+;//int time_counter; // 中断次数计数单元
+;char posit;
+;bit point_on, time_1s_ok;
+;
+;char time[2]; // 时、分、秒计数
+;char dis_buff[4]; // 显示缓冲区，存放要显示的 6 个字符的段码值
+;uint time_counter; // 1 秒计数器
+;//bit point_on; // 秒显示标志
+;
+;
+;
+;uchar keyValue;             //定义扫描结果参数
+;//uchar  dis[16]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,
+;             //  0    1    2    3    4    5    6    7
+;              // 0x7F,0x6F,0x77,0x7C,0x39,0x5E,0x79,0x71};//0~F的段码
+;             //  8    9    A    B    C    D    E    F
+;
+;
+;
+;
+;
+;
+;
+;
+;uchar keyValue;             //定义扫描结果参数
+;uchar  dis[16]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,
+;             //  0    1    2    3    4    5    6    7
+;               0x7F,0x6F,0x77,0x7C,0x39,0x5E,0x79,0x71};//0~F的段码
+;             //  8    9    A    B    C    D    E    F
+;
+;uchar aa; //片选
+;uchar bb;//字符
+;uchar cc;//信号量
+;uchar dd;
+;
+;
+;//***********************************************************************************
+;//延时
+;//***********************************************************************************
+;void delay(uint time)
+; 0000 004A {
+
+	.CSEG
+;PCODE: $0000000D VOL: 0
+;PCODE: $0000000E VOL: 0
+; 0000 004B 	uint i,j;
+; 0000 004C 	for(i = 0;i < time; i++)
+;PCODE: $0000000F VOL: 0
+;	time -> Y+4
+;	i -> R16,R17
+;	j -> R18,R19
+;PCODE: $00000010 VOL: 0
+;PCODE: $00000011 VOL: 0
+;PCODE: $00000012 VOL: 0
+;PCODE: $00000013 VOL: 0
+;PCODE: $00000014 VOL: 0
+;PCODE: $00000015 VOL: 0
+;PCODE: $00000016 VOL: 0
+;PCODE: $00000017 VOL: 0
+;PCODE: $00000018 VOL: 0
+; 0000 004D 	{
+; 0000 004E 	  for(j = 0;j < 30; j++);
+;PCODE: $00000019 VOL: 0
+;PCODE: $0000001A VOL: 0
+;PCODE: $0000001B VOL: 0
+;PCODE: $0000001C VOL: 0
+;PCODE: $0000001D VOL: 0
+;PCODE: $0000001E VOL: 0
+;PCODE: $0000001F VOL: 0
+;PCODE: $00000020 VOL: 0
+;PCODE: $00000021 VOL: 0
+;PCODE: $00000022 VOL: 0
+;PCODE: $00000023 VOL: 0
+;PCODE: $00000024 VOL: 0
+;PCODE: $00000025 VOL: 0
+;PCODE: $00000026 VOL: 0
+; 0000 004F     }
+;PCODE: $00000027 VOL: 0
+;PCODE: $00000028 VOL: 0
+;PCODE: $00000029 VOL: 0
+;PCODE: $0000002A VOL: 0
+;PCODE: $0000002B VOL: 0
+; 0000 0050 }
+;PCODE: $0000002C VOL: 0
+;PCODE: $0000002D VOL: 0
+;PCODE: $0000002E VOL: 0
+;PCODE: $0000002F VOL: 0
+;
+;//***********************************************************************************
+;//IO初始化操作
+;//***********************************************************************************
+;void IO_init(void)
+; 0000 0056 {
+;PCODE: $00000030 VOL: 0
+;PCODE: $00000031 VOL: 0
+; 0000 0057     DDRB =0xFF;            //设置PB口为输出
+;PCODE: $00000032 VOL: 0
+;PCODE: $00000033 VOL: 0
+; 0000 0058 	DDRD.7=1;        //蜂鸣器
+;PCODE: $00000034 VOL: 0
+;PCODE: $00000035 VOL: 0
+; 0000 0059     DDRC =0xFF;            //设置PC口为输出
+;PCODE: $00000036 VOL: 0
+;PCODE: $00000037 VOL: 0
+; 0000 005A /*	DIRD0=0;		            //设置PB0口为输出口
+; 0000 005B     DIRD1=0;
+; 0000 005C     DIRD2=0;
+; 0000 005D 	DIRD3=0;
+; 0000 005E     PIOD0=1;
+; 0000 005F     PIOD1=1;
+; 0000 0060     PIOD2=1;
+; 0000 0061     PIOD3=1;
+; 0000 0062 
+; 0000 0063 	DIRD4=1;
+; 0000 0064     DIRD5=1;
+; 0000 0065     DIRD6=1;
+; 0000 0066 	DIRD7=1;
+; 0000 0067     DIRA6=1;
+; 0000 0068 	DIRA7=0;*/
+; 0000 0069 	DDRD =0xf0;    //设置PD口为输入
+;PCODE: $00000038 VOL: 0
+;PCODE: $00000039 VOL: 0
+; 0000 006A 	PORTD=0x0f;    //设置PD上拉
+;PCODE: $0000003A VOL: 0
+;PCODE: $0000003B VOL: 0
+; 0000 006B 
+; 0000 006C 
+; 0000 006D     PORTC = 0x00;
+;PCODE: $0000003C VOL: 0
+;PCODE: $0000003D VOL: 0
+; 0000 006E     DDRC = 0xff;
+;PCODE: $0000003E VOL: 0
+;PCODE: $0000003F VOL: 0
+; 0000 006F      PORTA = 0x00;
+;PCODE: $00000040 VOL: 0
+;PCODE: $00000041 VOL: 0
+; 0000 0070 
+; 0000 0071     DDRA = 0x40;
+;PCODE: $00000042 VOL: 0
+;PCODE: $00000043 VOL: 0
+; 0000 0072     PORTB = 0xff;
+;PCODE: $00000044 VOL: 0
+;PCODE: $00000045 VOL: 0
+; 0000 0073     DDRB = 0xff;
+;PCODE: $00000046 VOL: 0
+;PCODE: $00000047 VOL: 0
+; 0000 0074 
+; 0000 0075 
+; 0000 0076 
+; 0000 0077 }
+;PCODE: $00000048 VOL: 0
+;PCODE: $00000049 VOL: 0
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;  void display() // 扫描显示函数，执行时间 12ms
+; 0000 0086 {
+;PCODE: $0000004A VOL: 0
+;PCODE: $0000004B VOL: 0
+; 0000 0087     PORTA.6=0;
+;PCODE: $0000004C VOL: 0
+;PCODE: $0000004D VOL: 0
+; 0000 0088     PORTD =0x03;
+;PCODE: $0000004E VOL: 0
+;PCODE: $0000004F VOL: 0
+; 0000 0089  //char i;
+; 0000 008A  //for(i=0;i<=3;i++)
+; 0000 008B  //{
+; 0000 008C  PORTC = led_7[dis_buff[posit]];
+;PCODE: $00000050 VOL: 0
+;PCODE: $00000051 VOL: 0
+;PCODE: $00000052 VOL: 0
+;PCODE: $00000053 VOL: 0
+;PCODE: $00000054 VOL: 0
+;PCODE: $00000055 VOL: 0
+;PCODE: $00000056 VOL: 0
+;PCODE: $00000057 VOL: 0
+; 0000 008D  if (point_on && posit==2) PORTC |= 0x80; // (1)
+;PCODE: $00000058 VOL: 0
+;PCODE: $00000059 VOL: 0
+;PCODE: $0000005A VOL: 0
+;PCODE: $0000005B VOL: 0
+;PCODE: $0000005C VOL: 0
+;PCODE: $0000005D VOL: 0
+;PCODE: $0000005E VOL: 0
+;PCODE: $0000005F VOL: 0
+;PCODE: $00000060 VOL: 0
+;PCODE: $00000061 VOL: 0
+;PCODE: $00000062 VOL: 0
+;PCODE: $00000063 VOL: 0
+; 0000 008E 
+; 0000 008F  //PORTD = position[posit];
+; 0000 0090  //PORTA = positiona[posit];
+; 0000 0091 
+; 0000 0092 
+; 0000 0093  if(posit==0)
+;PCODE: $00000064 VOL: 0
+;PCODE: $00000065 VOL: 0
+;PCODE: $00000066 VOL: 0
+; 0000 0094     {
+; 0000 0095        PORTA.6=1;
+;PCODE: $00000067 VOL: 0
+;PCODE: $00000068 VOL: 0
+; 0000 0096     }
+; 0000 0097     else
+;PCODE: $00000069 VOL: 0
+;PCODE: $0000006A VOL: 0
+; 0000 0098     {
+; 0000 0099        PORTD = position[posit];
+;PCODE: $0000006B VOL: 0
+;PCODE: $0000006C VOL: 0
+;PCODE: $0000006D VOL: 0
+;PCODE: $0000006E VOL: 0
+;PCODE: $0000006F VOL: 0
+; 0000 009A     }
+;PCODE: $00000070 VOL: 0
+; 0000 009B 
+; 0000 009C 
+; 0000 009D 
+; 0000 009E  //delay_ms(2); // (2)
+; 0000 009F  //PORTC = 0xff; // (3)
+; 0000 00A0  if(++posit >= 4)
+;PCODE: $00000071 VOL: 0
+;PCODE: $00000072 VOL: 0
+;PCODE: $00000073 VOL: 0
+;PCODE: $00000074 VOL: 0
+; 0000 00A1     {
+; 0000 00A2         posit = 0;
+;PCODE: $00000075 VOL: 0
+; 0000 00A3     }
+; 0000 00A4  //}
+; 0000 00A5 }
+;PCODE: $00000076 VOL: 0
+;PCODE: $00000077 VOL: 0
+;PCODE: $00000078 VOL: 0
+;
+;
+;
+;
+;
+;
+;interrupt [TIM0_COMP] void timer0_comp_isr(void)
+; 0000 00AD {
+;PCODE: $00000079 VOL: 0
+;PCODE: $0000007A VOL: 0
+; 0000 00AE  display(); // 调用 LED 扫描显示
+;PCODE: $0000007B VOL: 0
+; 0000 00AF  if (++time_counter>=500)
+;PCODE: $0000007C VOL: 0
+;PCODE: $0000007D VOL: 0
+;PCODE: $0000007E VOL: 0
+;PCODE: $0000007F VOL: 0
+;PCODE: $00000080 VOL: 0
+; 0000 00B0  {
+; 0000 00B1  time_counter = 0;
+;PCODE: $00000081 VOL: 0
+; 0000 00B2  time_1s_ok = 1;
+;PCODE: $00000082 VOL: 0
+;PCODE: $00000083 VOL: 0
+;PCODE: $00000084 VOL: 0
+; 0000 00B3  }
+; 0000 00B4 }
+;PCODE: $00000085 VOL: 0
+;PCODE: $00000086 VOL: 0
+;PCODE: $00000087 VOL: 0
+;PCODE: $00000088 VOL: 0
+;
+;
+;
+;
+;
+;
+;
+;
+;void time_to_disbuffer(void) // 时间值送显示缓冲区函数
+; 0000 00BE {
+;PCODE: $00000089 VOL: 0
+;PCODE: $0000008A VOL: 0
+; 0000 00BF  char i,j=0;
+; 0000 00C0  for (i=0;i<=1;i++)
+;PCODE: $0000008B VOL: 0
+;PCODE: $0000008C VOL: 0
+;	i -> R17
+;	j -> R16
+;PCODE: $0000008D VOL: 0
+;PCODE: $0000008E VOL: 0
+;PCODE: $0000008F VOL: 0
+;PCODE: $00000090 VOL: 0
+;PCODE: $00000091 VOL: 0
+;PCODE: $00000092 VOL: 0
+;PCODE: $00000093 VOL: 0
+;PCODE: $00000094 VOL: 0
+;PCODE: $00000095 VOL: 0
+;PCODE: $00000096 VOL: 0
+;PCODE: $00000097 VOL: 0
+; 0000 00C1  {
+; 0000 00C2  dis_buff[j++] = time[i] % 10;
+;PCODE: $00000098 VOL: 0
+;PCODE: $00000099 VOL: 0
+;PCODE: $0000009A VOL: 0
+;PCODE: $0000009B VOL: 0
+;PCODE: $0000009C VOL: 0
+;PCODE: $0000009D VOL: 0
+;PCODE: $0000009E VOL: 0
+;PCODE: $0000009F VOL: 0
+;PCODE: $000000A0 VOL: 0
+;PCODE: $000000A1 VOL: 0
+;PCODE: $000000A2 VOL: 0
+;PCODE: $000000A3 VOL: 0
+;PCODE: $000000A4 VOL: 0
+;PCODE: $000000A5 VOL: 0
+;PCODE: $000000A6 VOL: 0
+; 0000 00C3  dis_buff[j++] = time[i] / 10;
+;PCODE: $000000A7 VOL: 0
+;PCODE: $000000A8 VOL: 0
+;PCODE: $000000A9 VOL: 0
+;PCODE: $000000AA VOL: 0
+;PCODE: $000000AB VOL: 0
+;PCODE: $000000AC VOL: 0
+;PCODE: $000000AD VOL: 0
+;PCODE: $000000AE VOL: 0
+;PCODE: $000000AF VOL: 0
+;PCODE: $000000B0 VOL: 0
+;PCODE: $000000B1 VOL: 0
+;PCODE: $000000B2 VOL: 0
+;PCODE: $000000B3 VOL: 0
+;PCODE: $000000B4 VOL: 0
+;PCODE: $000000B5 VOL: 0
+; 0000 00C4  }
+;PCODE: $000000B6 VOL: 0
+;PCODE: $000000B7 VOL: 0
+;PCODE: $000000B8 VOL: 0
+;PCODE: $000000B9 VOL: 0
+;PCODE: $000000BA VOL: 0
+; 0000 00C5 }
+;PCODE: $000000BB VOL: 0
+;PCODE: $000000BC VOL: 0
+;PCODE: $000000BD VOL: 0
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;void keyScan()
+; 0000 00DD  {
+;PCODE: $000000BE VOL: 0
+;PCODE: $000000BF VOL: 0
+; 0000 00DE //    PORTD=0x00;
+; 0000 00DF     uchar x,y;
+; 0000 00E0     DDRD =0x03;                      //设置PD口高4位为输入
+;PCODE: $000000C0 VOL: 0
+;PCODE: $000000C1 VOL: 0
+;	x -> R17
+;	y -> R16
+;PCODE: $000000C2 VOL: 0
+;PCODE: $000000C3 VOL: 0
+; 0000 00E1     PORTD=0x0c;                      //设置PD高4位上拉,此时PIND高4位全1
+;PCODE: $000000C4 VOL: 0
+;PCODE: $000000C5 VOL: 0
+; 0000 00E2     if((PIND&0x0c)!=0x0c)        //判断是否有按键按下
+;PCODE: $000000C6 VOL: 0
+;PCODE: $000000C7 VOL: 0
+;PCODE: $000000C8 VOL: 0
+;PCODE: $000000C9 VOL: 0
+; 0000 00E3     {
+; 0000 00E4      delay(20);                  //延时消抖
+;PCODE: $000000CA VOL: 0
+;PCODE: $000000CB VOL: 0
+;PCODE: $000000CC VOL: 0
+; 0000 00E5      if((PIND&0x0c)!=0x0c)       //再次判断是否有按键按下
+;PCODE: $000000CD VOL: 0
+;PCODE: $000000CE VOL: 0
+;PCODE: $000000CF VOL: 0
+;PCODE: $000000D0 VOL: 0
+; 0000 00E6 	   {
+; 0000 00E7 //	   PORTB=0x0f;
+; 0000 00E8        x=(PIND&0x0c);
+;PCODE: $000000D1 VOL: 0
+;PCODE: $000000D2 VOL: 0
+;PCODE: $000000D3 VOL: 0
+; 0000 00E9        DDRD =0x0c;
+;PCODE: $000000D4 VOL: 0
+;PCODE: $000000D5 VOL: 0
+; 0000 00EA 
+; 0000 00EB 
+; 0000 00EC 
+; 0000 00ED         {
+; 0000 00EE        delay(400);
+;PCODE: $000000D6 VOL: 0
+;PCODE: $000000D7 VOL: 0
+;PCODE: $000000D8 VOL: 0
+; 0000 00EF 
+; 0000 00F0               if((PIND&0x0c)!=0x0c)
+;PCODE: $000000D9 VOL: 0
+;PCODE: $000000DA VOL: 0
+;PCODE: $000000DB VOL: 0
+;PCODE: $000000DC VOL: 0
+; 0000 00F1               cc=0;
+;PCODE: $000000DD VOL: 0
+; 0000 00F2               //长按实现函数
+; 0000 00F3                          }
+;PCODE: $000000DE VOL: 0
+; 0000 00F4 
+; 0000 00F5 
+; 0000 00F6 
+; 0000 00F7 
+; 0000 00F8 
+; 0000 00F9 
+; 0000 00FA     aa=aa%8;
+;PCODE: $000000DF VOL: 0
+;PCODE: $000000E0 VOL: 0
+;PCODE: $000000E1 VOL: 0
+;PCODE: $000000E2 VOL: 0
+;PCODE: $000000E3 VOL: 0
+; 0000 00FB     aa++;
+;PCODE: $000000E4 VOL: 0
+; 0000 00FC 
+; 0000 00FD 
+; 0000 00FE 
+; 0000 00FF 
+; 0000 0100 
+; 0000 0101 
+; 0000 0102     bb=bb%10;
+;PCODE: $000000E5 VOL: 0
+;PCODE: $000000E6 VOL: 0
+;PCODE: $000000E7 VOL: 0
+;PCODE: $000000E8 VOL: 0
+;PCODE: $000000E9 VOL: 0
+; 0000 0103       bb++;
+;PCODE: $000000EA VOL: 0
+; 0000 0104 
+; 0000 0105 
+; 0000 0106 
+; 0000 0107        delay(5);
+;PCODE: $000000EB VOL: 0
+;PCODE: $000000EC VOL: 0
+;PCODE: $000000ED VOL: 0
+; 0000 0108        y=(PIND&0x03);
+;PCODE: $000000EE VOL: 0
+;PCODE: $000000EF VOL: 0
+;PCODE: $000000F0 VOL: 0
+; 0000 0109        keyValue=x|y;
+;PCODE: $000000F1 VOL: 0
+;PCODE: $000000F2 VOL: 0
+;PCODE: $000000F3 VOL: 0
+; 0000 010A        while((PIND&0x03)!=0x03);
+;PCODE: $000000F4 VOL: 0
+;PCODE: $000000F5 VOL: 0
+;PCODE: $000000F6 VOL: 0
+;PCODE: $000000F7 VOL: 0
+;PCODE: $000000F8 VOL: 0
+;PCODE: $000000F9 VOL: 0
+;PCODE: $000000FA VOL: 0
+; 0000 010B        }
+; 0000 010C 
+; 0000 010D        //等待按键松开
+; 0000 010E 
+; 0000 010F //       PORTB=0xf0;
+; 0000 0110     }
+;PCODE: $000000FB VOL: 0
+; 0000 0111  }
+;PCODE: $000000FC VOL: 0
+;PCODE: $000000FD VOL: 0
+;PCODE: $000000FE VOL: 0
+;PCODE: $000000FF VOL: 0
+;
+; void keyHandle()
+; 0000 0114  {
+;PCODE: $00000100 VOL: 0
+;PCODE: $00000101 VOL: 0
+; 0000 0115         switch(keyValue)
+;PCODE: $00000102 VOL: 0
+;PCODE: $00000103 VOL: 0
+; 0000 0116           {
+; 0000 0117             case 0x06:                 //S17            上
+;PCODE: $00000104 VOL: 0
+;PCODE: $00000105 VOL: 0
+; 0000 0118                 {
+; 0000 0119                   PORTB=0XFF;
+;PCODE: $00000106 VOL: 0
+;PCODE: $00000107 VOL: 0
+; 0000 011A                   time_1s_ok = 0;
+;PCODE: $00000108 VOL: 0
+;PCODE: $00000109 VOL: 0
+;PCODE: $0000010A VOL: 0
+; 0000 011B 
+; 0000 011C                  break;
+;PCODE: $0000010B VOL: 0
+; 0000 011D                 }
+; 0000 011E             case 0x0a:                 //S18           左
+;PCODE: $0000010C VOL: 0
+;PCODE: $0000010D VOL: 0
+;PCODE: $0000010E VOL: 0
+; 0000 011F                 {
+; 0000 0120                  PORTB=led_7[bb];;
+;PCODE: $0000010F VOL: 0
+;PCODE: $00000110 VOL: 0
+;PCODE: $00000111 VOL: 0
+;PCODE: $00000112 VOL: 0
+;PCODE: $00000113 VOL: 0
+; 0000 0121                  time_1s_ok = 0;
+;PCODE: $00000114 VOL: 0
+;PCODE: $00000115 VOL: 0
+;PCODE: $00000116 VOL: 0
+; 0000 0122                  time[1]=0;
+;PCODE: $00000117 VOL: 0
+;PCODE: $00000118 VOL: 0
+;PCODE: $00000119 VOL: 0
+; 0000 0123                  time[0]=0;
+;PCODE: $0000011A VOL: 0
+;PCODE: $0000011B VOL: 0
+; 0000 0124                  break;
+;PCODE: $0000011C VOL: 0
+; 0000 0125                 }
+; 0000 0126             case 0x05:                 //S19         下
+;PCODE: $0000011D VOL: 0
+;PCODE: $0000011E VOL: 0
+;PCODE: $0000011F VOL: 0
+; 0000 0127                 {
+; 0000 0128 
+; 0000 0129                      time_1s_ok = 1;       //数码管
+;PCODE: $00000120 VOL: 0
+;PCODE: $00000121 VOL: 0
+;PCODE: $00000122 VOL: 0
+; 0000 012A 
+; 0000 012B 
+; 0000 012C                  break;
+;PCODE: $00000123 VOL: 0
+; 0000 012D                 }
+; 0000 012E             case 0x09:                 //S20           右
+;PCODE: $00000124 VOL: 0
+;PCODE: $00000125 VOL: 0
+;PCODE: $00000126 VOL: 0
+; 0000 012F                 {
+; 0000 0130                 PORTB=resit[aa];
+;PCODE: $00000127 VOL: 0
+;PCODE: $00000128 VOL: 0
+;PCODE: $00000129 VOL: 0
+;PCODE: $0000012A VOL: 0
+;PCODE: $0000012B VOL: 0
+; 0000 0131 
+; 0000 0132 
+; 0000 0133 
+; 0000 0134 
+; 0000 0135 
+; 0000 0136 
+; 0000 0137 
+; 0000 0138 
+; 0000 0139 
+; 0000 013A                  break;
+;PCODE: $0000012C VOL: 0
+; 0000 013B                 }
+; 0000 013C             default:
+;PCODE: $0000012D VOL: 0
+; 0000 013D //                 PORTB=0xf0;
+; 0000 013E          break;
+;PCODE: $0000012E VOL: 0
+; 0000 013F           }
+;PCODE: $0000012F VOL: 0
+; 0000 0140  }
+;PCODE: $00000130 VOL: 0
+;PCODE: $00000131 VOL: 0
+;
+;//***********************************************************************************
+;//主函数
+;//***********************************************************************************
+;void main()
+; 0000 0146 {
+;PCODE: $00000132 VOL: 0
+; 0000 0147     IO_init();                //IO初始化
+;PCODE: $00000133 VOL: 0
+; 0000 0148     PORTB=0xff;
+;PCODE: $00000134 VOL: 0
+;PCODE: $00000135 VOL: 0
+; 0000 0149 
+; 0000 014A 
+; 0000 014B 
+; 0000 014C 
+; 0000 014D     TCCR0=0x0b; // 内部时钟，64 分频（2M/64=31.25KHz），CTC 模式
+;PCODE: $00000136 VOL: 0
+;PCODE: $00000137 VOL: 0
+; 0000 014E     TCNT0=0x00;
+;PCODE: $00000138 VOL: 0
+;PCODE: $00000139 VOL: 0
+; 0000 014F     OCR0=0x7C; //125/31.25=4ms//计数次数
+;PCODE: $0000013A VOL: 0
+;PCODE: $0000013B VOL: 0
+; 0000 0150     TIMSK=0x02; // 允许 T/C0 比较匹配中断
+;PCODE: $0000013C VOL: 0
+;PCODE: $0000013D VOL: 0
+; 0000 0151 
+; 0000 0152      #asm("sei");
+;PCODE: $0000013E VOL: 0
+	sei
+;PCODE: $0000013F VOL: 0
+; 0000 0153 
+; 0000 0154 
+; 0000 0155 
+; 0000 0156 
+; 0000 0157 
+; 0000 0158 
+; 0000 0159 
+; 0000 015A 
+; 0000 015B 
+; 0000 015C 
+; 0000 015D 
+; 0000 015E 
+; 0000 015F 
+; 0000 0160     while(1)                  //死循环
+;PCODE: $00000140 VOL: 0
+; 0000 0161      {
+; 0000 0162  //     PORTB=0xff;
+; 0000 0163 //      PORTC=0x66;
+; 0000 0164 /*      LED_1=1;
+; 0000 0165       LED_2=1;
+; 0000 0166       LED_3=1;
+; 0000 0167       LED_4=1;*/
+; 0000 0168      keyScan();             //按键扫描
+;PCODE: $00000141 VOL: 0
+; 0000 0169      keyHandle();           //按键处理
+;PCODE: $00000142 VOL: 0
+; 0000 016A      display();
+;PCODE: $00000143 VOL: 0
+; 0000 016B                                             display();
+;PCODE: $00000144 VOL: 0
+; 0000 016C 
+; 0000 016D 
+; 0000 016E 
+; 0000 016F 
+; 0000 0170 
+; 0000 0171 
+; 0000 0172 
+; 0000 0173 
+; 0000 0174 
+; 0000 0175 
+; 0000 0176 
+; 0000 0177 
+; 0000 0178 
+; 0000 0179 
+; 0000 017A 
+; 0000 017B 
+; 0000 017C 
+; 0000 017D 
+; 0000 017E 
+; 0000 017F 
+; 0000 0180 
+; 0000 0181 
+; 0000 0182 
+; 0000 0183       display();
+;PCODE: $00000145 VOL: 0
+; 0000 0184       keyScan();             //按键扫描
+;PCODE: $00000146 VOL: 0
+; 0000 0185       keyHandle();           //按键处理
+;PCODE: $00000147 VOL: 0
+; 0000 0186 
+; 0000 0187 
+; 0000 0188        if (time_1s_ok) // 1 秒到
+;PCODE: $00000148 VOL: 0
+;PCODE: $00000149 VOL: 0
+;PCODE: $0000014A VOL: 0
+; 0000 0189       {
+; 0000 018A         time_1s_ok = 0;
+;PCODE: $0000014B VOL: 0
+;PCODE: $0000014C VOL: 0
+;PCODE: $0000014D VOL: 0
+; 0000 018B         point_on = ~point_on;
+;PCODE: $0000014E VOL: 0
+;PCODE: $0000014F VOL: 0
+;PCODE: $00000150 VOL: 0
+; 0000 018C         if(i>=1)
+;PCODE: $00000151 VOL: 0
+;PCODE: $00000152 VOL: 0
+;PCODE: $00000153 VOL: 0
+; 0000 018D         {
+; 0000 018E             if(time[0]>=31)
+;PCODE: $00000154 VOL: 0
+;PCODE: $00000155 VOL: 0
+;PCODE: $00000156 VOL: 0
+; 0000 018F             {PORTB=0xff;
+;PCODE: $00000157 VOL: 0
+;PCODE: $00000158 VOL: 0
+; 0000 0190             PORTD.7=0;}
+;PCODE: $00000159 VOL: 0
+;PCODE: $0000015A VOL: 0
+; 0000 0191             else if(time[0]%2==0)
+;PCODE: $0000015B VOL: 0
+;PCODE: $0000015C VOL: 0
+;PCODE: $0000015D VOL: 0
+;PCODE: $0000015E VOL: 0
+;PCODE: $0000015F VOL: 0
+;PCODE: $00000160 VOL: 0
+;PCODE: $00000161 VOL: 0
+;PCODE: $00000162 VOL: 0
+; 0000 0192             {PORTB = 0x00;
+;PCODE: $00000163 VOL: 0
+;PCODE: $00000164 VOL: 0
+; 0000 0193             PORTD.7=1;}
+;PCODE: $00000165 VOL: 0
+;PCODE: $00000166 VOL: 0
+; 0000 0194             else
+;PCODE: $00000167 VOL: 0
+;PCODE: $00000168 VOL: 0
+; 0000 0195            { PORTB = 0xff;
+;PCODE: $00000169 VOL: 0
+;PCODE: $0000016A VOL: 0
+; 0000 0196             PORTD.7=0;}
+;PCODE: $0000016B VOL: 0
+;PCODE: $0000016C VOL: 0
+;PCODE: $0000016D VOL: 0
+;PCODE: $0000016E VOL: 0
+; 0000 0197 
+; 0000 0198         }
+; 0000 0199         if (++time[0] >= 60) // 以下时间调整
+;PCODE: $0000016F VOL: 0
+;PCODE: $00000170 VOL: 0
+;PCODE: $00000171 VOL: 0
+;PCODE: $00000172 VOL: 0
+;PCODE: $00000173 VOL: 0
+;PCODE: $00000174 VOL: 0
+; 0000 019A         {
+; 0000 019B             time[0] = 0;
+;PCODE: $00000175 VOL: 0
+;PCODE: $00000176 VOL: 0
+; 0000 019C             //PORTD.7=1;
+; 0000 019D              i++;
+;PCODE: $00000177 VOL: 0
+;PCODE: $00000178 VOL: 0
+;PCODE: $00000179 VOL: 0
+;PCODE: $0000017A VOL: 0
+; 0000 019E             if (++time[1] >= 60)
+;PCODE: $0000017B VOL: 0
+;PCODE: $0000017C VOL: 0
+;PCODE: $0000017D VOL: 0
+;PCODE: $0000017E VOL: 0
+;PCODE: $0000017F VOL: 0
+;PCODE: $00000180 VOL: 0
+;PCODE: $00000181 VOL: 0
+; 0000 019F             {
+; 0000 01A0                 time[1] = 0;
+;PCODE: $00000182 VOL: 0
+;PCODE: $00000183 VOL: 0
+;PCODE: $00000184 VOL: 0
+; 0000 01A1                 //if (++time[2] >= 24) time[2] = 0;
+; 0000 01A2             }
+; 0000 01A3         }
+;PCODE: $00000185 VOL: 0
+; 0000 01A4         time_to_disbuffer(); // 新调整好的时间送显示缓冲区
+;PCODE: $00000186 VOL: 0
+;PCODE: $00000187 VOL: 0
+; 0000 01A5       }
+; 0000 01A6 
+; 0000 01A7 
+; 0000 01A8 
+; 0000 01A9 
+; 0000 01AA      }
+;PCODE: $00000188 VOL: 0
+;PCODE: $00000189 VOL: 0
+;PCODE: $0000018A VOL: 0
+; 0000 01AB }
+;PCODE: $0000018B VOL: 0
+;PCODE: $0000018C VOL: 0
+;PCODE: $0000018D VOL: 0

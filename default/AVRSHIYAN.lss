@@ -1,0 +1,432 @@
+
+AVRSHIYAN.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000256  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000010  00800060  00000256  000002ea  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000001  00800070  00800070  000002fa  2**0
+                  ALLOC
+  3 .debug_aranges 00000020  00000000  00000000  000002fa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 00000060  00000000  00000000  0000031a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000142  00000000  00000000  0000037a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000000ee  00000000  00000000  000004bc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000178  00000000  00000000  000005aa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000060  00000000  00000000  00000724  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000096  00000000  00000000  00000784  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   8:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+   c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  1c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  2c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  30:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  34:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  38:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  3c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  40:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  44:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  48:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  4c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  50:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e6 e5       	ldi	r30, 0x56	; 86
+  68:	f2 e0       	ldi	r31, 0x02	; 2
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
+
+0000006c <.do_copy_data_loop>:
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+
+00000070 <.do_copy_data_start>:
+  70:	a0 37       	cpi	r26, 0x70	; 112
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
+
+00000076 <__do_clear_bss>:
+  76:	10 e0       	ldi	r17, 0x00	; 0
+  78:	a0 e7       	ldi	r26, 0x70	; 112
+  7a:	b0 e0       	ldi	r27, 0x00	; 0
+  7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
+
+0000007e <.do_clear_bss_loop>:
+  7e:	1d 92       	st	X+, r1
+
+00000080 <.do_clear_bss_start>:
+  80:	a1 37       	cpi	r26, 0x71	; 113
+  82:	b1 07       	cpc	r27, r17
+  84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
+  86:	0e 94 1a 01 	call	0x234	; 0x234 <main>
+  8a:	0c 94 29 01 	jmp	0x252	; 0x252 <_exit>
+
+0000008e <__bad_interrupt>:
+  8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000092 <delay>:
+
+//***********************************************************************************
+//延时
+//***********************************************************************************
+void delay(uint time)
+{
+  92:	df 93       	push	r29
+  94:	cf 93       	push	r28
+  96:	00 d0       	rcall	.+0      	; 0x98 <delay+0x6>
+  98:	00 d0       	rcall	.+0      	; 0x9a <delay+0x8>
+  9a:	00 d0       	rcall	.+0      	; 0x9c <delay+0xa>
+  9c:	cd b7       	in	r28, 0x3d	; 61
+  9e:	de b7       	in	r29, 0x3e	; 62
+  a0:	9e 83       	std	Y+6, r25	; 0x06
+  a2:	8d 83       	std	Y+5, r24	; 0x05
+	uint i,j;
+	for(i = 0;i < time; i++)
+  a4:	1c 82       	std	Y+4, r1	; 0x04
+  a6:	1b 82       	std	Y+3, r1	; 0x03
+  a8:	12 c0       	rjmp	.+36     	; 0xce <delay+0x3c>
+	{
+	  for(j = 0;j < 30; j++);
+  aa:	1a 82       	std	Y+2, r1	; 0x02
+  ac:	19 82       	std	Y+1, r1	; 0x01
+  ae:	05 c0       	rjmp	.+10     	; 0xba <delay+0x28>
+  b0:	89 81       	ldd	r24, Y+1	; 0x01
+  b2:	9a 81       	ldd	r25, Y+2	; 0x02
+  b4:	01 96       	adiw	r24, 0x01	; 1
+  b6:	9a 83       	std	Y+2, r25	; 0x02
+  b8:	89 83       	std	Y+1, r24	; 0x01
+  ba:	89 81       	ldd	r24, Y+1	; 0x01
+  bc:	9a 81       	ldd	r25, Y+2	; 0x02
+  be:	8e 31       	cpi	r24, 0x1E	; 30
+  c0:	91 05       	cpc	r25, r1
+  c2:	b0 f3       	brcs	.-20     	; 0xb0 <delay+0x1e>
+//延时
+//***********************************************************************************
+void delay(uint time)
+{
+	uint i,j;
+	for(i = 0;i < time; i++)
+  c4:	8b 81       	ldd	r24, Y+3	; 0x03
+  c6:	9c 81       	ldd	r25, Y+4	; 0x04
+  c8:	01 96       	adiw	r24, 0x01	; 1
+  ca:	9c 83       	std	Y+4, r25	; 0x04
+  cc:	8b 83       	std	Y+3, r24	; 0x03
+  ce:	2b 81       	ldd	r18, Y+3	; 0x03
+  d0:	3c 81       	ldd	r19, Y+4	; 0x04
+  d2:	8d 81       	ldd	r24, Y+5	; 0x05
+  d4:	9e 81       	ldd	r25, Y+6	; 0x06
+  d6:	28 17       	cp	r18, r24
+  d8:	39 07       	cpc	r19, r25
+  da:	38 f3       	brcs	.-50     	; 0xaa <delay+0x18>
+	{
+	  for(j = 0;j < 30; j++);
+    }
+}
+  dc:	26 96       	adiw	r28, 0x06	; 6
+  de:	0f b6       	in	r0, 0x3f	; 63
+  e0:	f8 94       	cli
+  e2:	de bf       	out	0x3e, r29	; 62
+  e4:	0f be       	out	0x3f, r0	; 63
+  e6:	cd bf       	out	0x3d, r28	; 61
+  e8:	cf 91       	pop	r28
+  ea:	df 91       	pop	r29
+  ec:	08 95       	ret
+
+000000ee <IO_init>:
+
+//***********************************************************************************
+//IO初始化操作
+//***********************************************************************************
+void IO_init(void)
+{
+  ee:	df 93       	push	r29
+  f0:	cf 93       	push	r28
+  f2:	cd b7       	in	r28, 0x3d	; 61
+  f4:	de b7       	in	r29, 0x3e	; 62
+    DDRB =0xFF;            //设置PB口为输出
+  f6:	e7 e3       	ldi	r30, 0x37	; 55
+  f8:	f0 e0       	ldi	r31, 0x00	; 0
+  fa:	8f ef       	ldi	r24, 0xFF	; 255
+  fc:	80 83       	st	Z, r24
+	DDRC =0xFF;            //设置PC口为输出
+  fe:	e4 e3       	ldi	r30, 0x34	; 52
+ 100:	f0 e0       	ldi	r31, 0x00	; 0
+ 102:	8f ef       	ldi	r24, 0xFF	; 255
+ 104:	80 83       	st	Z, r24
+    DIRD5=1;
+    DIRD6=1;
+	DIRD7=1;
+    DIRA6=1;
+	DIRA7=0;*/
+	DDRD =0x00;    //设置PD口为输入
+ 106:	e1 e3       	ldi	r30, 0x31	; 49
+ 108:	f0 e0       	ldi	r31, 0x00	; 0
+ 10a:	10 82       	st	Z, r1
+	PORTD=0xff;    //设置PD上拉
+ 10c:	e2 e3       	ldi	r30, 0x32	; 50
+ 10e:	f0 e0       	ldi	r31, 0x00	; 0
+ 110:	8f ef       	ldi	r24, 0xFF	; 255
+ 112:	80 83       	st	Z, r24
+}
+ 114:	cf 91       	pop	r28
+ 116:	df 91       	pop	r29
+ 118:	08 95       	ret
+
+0000011a <keyScan>:
+void keyScan()                             
+ {
+ 11a:	df 93       	push	r29
+ 11c:	cf 93       	push	r28
+ 11e:	00 d0       	rcall	.+0      	; 0x120 <keyScan+0x6>
+ 120:	cd b7       	in	r28, 0x3d	; 61
+ 122:	de b7       	in	r29, 0x3e	; 62
+//    PORTD=0x00;
+    uchar x,y; 
+    DDRD =0x03;                      //设置PD口高4位为输入
+ 124:	e1 e3       	ldi	r30, 0x31	; 49
+ 126:	f0 e0       	ldi	r31, 0x00	; 0
+ 128:	83 e0       	ldi	r24, 0x03	; 3
+ 12a:	80 83       	st	Z, r24
+    PORTD=0x0c;                      //设置PD高4位上拉,此时PIND高4位全1
+ 12c:	e2 e3       	ldi	r30, 0x32	; 50
+ 12e:	f0 e0       	ldi	r31, 0x00	; 0
+ 130:	8c e0       	ldi	r24, 0x0C	; 12
+ 132:	80 83       	st	Z, r24
+    if((PIND&0x0c)!=0x0c)        //判断是否有按键按下
+ 134:	e0 e3       	ldi	r30, 0x30	; 48
+ 136:	f0 e0       	ldi	r31, 0x00	; 0
+ 138:	80 81       	ld	r24, Z
+ 13a:	88 2f       	mov	r24, r24
+ 13c:	90 e0       	ldi	r25, 0x00	; 0
+ 13e:	8c 70       	andi	r24, 0x0C	; 12
+ 140:	90 70       	andi	r25, 0x00	; 0
+ 142:	8c 30       	cpi	r24, 0x0C	; 12
+ 144:	91 05       	cpc	r25, r1
+ 146:	99 f1       	breq	.+102    	; 0x1ae <keyScan+0x94>
+    {
+     delay(20);                  //延时消抖
+ 148:	84 e1       	ldi	r24, 0x14	; 20
+ 14a:	90 e0       	ldi	r25, 0x00	; 0
+ 14c:	0e 94 49 00 	call	0x92	; 0x92 <delay>
+     if((PIND&0x0c)!=0x0c)       //再次判断是否有按键按下
+ 150:	e0 e3       	ldi	r30, 0x30	; 48
+ 152:	f0 e0       	ldi	r31, 0x00	; 0
+ 154:	80 81       	ld	r24, Z
+ 156:	88 2f       	mov	r24, r24
+ 158:	90 e0       	ldi	r25, 0x00	; 0
+ 15a:	8c 70       	andi	r24, 0x0C	; 12
+ 15c:	90 70       	andi	r25, 0x00	; 0
+ 15e:	8c 30       	cpi	r24, 0x0C	; 12
+ 160:	91 05       	cpc	r25, r1
+ 162:	29 f1       	breq	.+74     	; 0x1ae <keyScan+0x94>
+	   {
+//	   PORTB=0x0f;
+       x=(PIND&0x0c);
+ 164:	e0 e3       	ldi	r30, 0x30	; 48
+ 166:	f0 e0       	ldi	r31, 0x00	; 0
+ 168:	80 81       	ld	r24, Z
+ 16a:	8c 70       	andi	r24, 0x0C	; 12
+ 16c:	8a 83       	std	Y+2, r24	; 0x02
+       DDRD =0x0c;                      
+ 16e:	e1 e3       	ldi	r30, 0x31	; 49
+ 170:	f0 e0       	ldi	r31, 0x00	; 0
+ 172:	8c e0       	ldi	r24, 0x0C	; 12
+ 174:	80 83       	st	Z, r24
+       PORTD=0x03;
+ 176:	e2 e3       	ldi	r30, 0x32	; 50
+ 178:	f0 e0       	ldi	r31, 0x00	; 0
+ 17a:	83 e0       	ldi	r24, 0x03	; 3
+ 17c:	80 83       	st	Z, r24
+       delay(5);
+ 17e:	85 e0       	ldi	r24, 0x05	; 5
+ 180:	90 e0       	ldi	r25, 0x00	; 0
+ 182:	0e 94 49 00 	call	0x92	; 0x92 <delay>
+       y=(PIND&0x03);
+ 186:	e0 e3       	ldi	r30, 0x30	; 48
+ 188:	f0 e0       	ldi	r31, 0x00	; 0
+ 18a:	80 81       	ld	r24, Z
+ 18c:	83 70       	andi	r24, 0x03	; 3
+ 18e:	89 83       	std	Y+1, r24	; 0x01
+	   keyValue=x|y;
+ 190:	9a 81       	ldd	r25, Y+2	; 0x02
+ 192:	89 81       	ldd	r24, Y+1	; 0x01
+ 194:	89 2b       	or	r24, r25
+ 196:	80 93 70 00 	sts	0x0070, r24
+       while((PIND&0x03)!=0x03); 
+ 19a:	e0 e3       	ldi	r30, 0x30	; 48
+ 19c:	f0 e0       	ldi	r31, 0x00	; 0
+ 19e:	80 81       	ld	r24, Z
+ 1a0:	88 2f       	mov	r24, r24
+ 1a2:	90 e0       	ldi	r25, 0x00	; 0
+ 1a4:	83 70       	andi	r24, 0x03	; 3
+ 1a6:	90 70       	andi	r25, 0x00	; 0
+ 1a8:	83 30       	cpi	r24, 0x03	; 3
+ 1aa:	91 05       	cpc	r25, r1
+ 1ac:	b1 f7       	brne	.-20     	; 0x19a <keyScan+0x80>
+
+       //等待按键松开
+	   
+//	   PORTB=0xf0;
+    }
+ }
+ 1ae:	0f 90       	pop	r0
+ 1b0:	0f 90       	pop	r0
+ 1b2:	cf 91       	pop	r28
+ 1b4:	df 91       	pop	r29
+ 1b6:	08 95       	ret
+
+000001b8 <keyHandle>:
+
+ void keyHandle()                     
+ {      
+ 1b8:	df 93       	push	r29
+ 1ba:	cf 93       	push	r28
+ 1bc:	00 d0       	rcall	.+0      	; 0x1be <keyHandle+0x6>
+ 1be:	cd b7       	in	r28, 0x3d	; 61
+ 1c0:	de b7       	in	r29, 0x3e	; 62
+        switch(keyValue)         
+ 1c2:	80 91 70 00 	lds	r24, 0x0070
+ 1c6:	28 2f       	mov	r18, r24
+ 1c8:	30 e0       	ldi	r19, 0x00	; 0
+ 1ca:	3a 83       	std	Y+2, r19	; 0x02
+ 1cc:	29 83       	std	Y+1, r18	; 0x01
+ 1ce:	89 81       	ldd	r24, Y+1	; 0x01
+ 1d0:	9a 81       	ldd	r25, Y+2	; 0x02
+ 1d2:	86 30       	cpi	r24, 0x06	; 6
+ 1d4:	91 05       	cpc	r25, r1
+ 1d6:	b1 f0       	breq	.+44     	; 0x204 <keyHandle+0x4c>
+ 1d8:	29 81       	ldd	r18, Y+1	; 0x01
+ 1da:	3a 81       	ldd	r19, Y+2	; 0x02
+ 1dc:	27 30       	cpi	r18, 0x07	; 7
+ 1de:	31 05       	cpc	r19, r1
+ 1e0:	34 f4       	brge	.+12     	; 0x1ee <keyHandle+0x36>
+ 1e2:	89 81       	ldd	r24, Y+1	; 0x01
+ 1e4:	9a 81       	ldd	r25, Y+2	; 0x02
+ 1e6:	85 30       	cpi	r24, 0x05	; 5
+ 1e8:	91 05       	cpc	r25, r1
+ 1ea:	b1 f0       	breq	.+44     	; 0x218 <keyHandle+0x60>
+ 1ec:	1e c0       	rjmp	.+60     	; 0x22a <keyHandle+0x72>
+ 1ee:	29 81       	ldd	r18, Y+1	; 0x01
+ 1f0:	3a 81       	ldd	r19, Y+2	; 0x02
+ 1f2:	29 30       	cpi	r18, 0x09	; 9
+ 1f4:	31 05       	cpc	r19, r1
+ 1f6:	a9 f0       	breq	.+42     	; 0x222 <keyHandle+0x6a>
+ 1f8:	89 81       	ldd	r24, Y+1	; 0x01
+ 1fa:	9a 81       	ldd	r25, Y+2	; 0x02
+ 1fc:	8a 30       	cpi	r24, 0x0A	; 10
+ 1fe:	91 05       	cpc	r25, r1
+ 200:	31 f0       	breq	.+12     	; 0x20e <keyHandle+0x56>
+ 202:	13 c0       	rjmp	.+38     	; 0x22a <keyHandle+0x72>
+          {
+            case 0x06:                 //如果S17按键按下  
+				{
+                 PORTB=0xfe;       //点亮一个发光二极管  
+ 204:	e8 e3       	ldi	r30, 0x38	; 56
+ 206:	f0 e0       	ldi	r31, 0x00	; 0
+ 208:	8e ef       	ldi	r24, 0xFE	; 254
+ 20a:	80 83       	st	Z, r24
+ 20c:	0e c0       	rjmp	.+28     	; 0x22a <keyHandle+0x72>
+                 break;          
+                }
+            case 0x0a:                 //如果S18按键按下 
+				{
+                 PORTB=0xfd;       //点亮一个发光二极管  
+ 20e:	e8 e3       	ldi	r30, 0x38	; 56
+ 210:	f0 e0       	ldi	r31, 0x00	; 0
+ 212:	8d ef       	ldi	r24, 0xFD	; 253
+ 214:	80 83       	st	Z, r24
+ 216:	09 c0       	rjmp	.+18     	; 0x22a <keyHandle+0x72>
+                 break;
+                }
+            case 0x05:                 //如果S19按键按下 
+				{
+                 PORTB=0xfb;       //点亮一个发光二极管  
+ 218:	e8 e3       	ldi	r30, 0x38	; 56
+ 21a:	f0 e0       	ldi	r31, 0x00	; 0
+ 21c:	8b ef       	ldi	r24, 0xFB	; 251
+ 21e:	80 83       	st	Z, r24
+ 220:	04 c0       	rjmp	.+8      	; 0x22a <keyHandle+0x72>
+                 break;
+                }
+            case 0x09:                 //如果S20按键按下 
+				{
+                 PORTB=0xf7;       //点亮一个发光二极管  
+ 222:	e8 e3       	ldi	r30, 0x38	; 56
+ 224:	f0 e0       	ldi	r31, 0x00	; 0
+ 226:	87 ef       	ldi	r24, 0xF7	; 247
+ 228:	80 83       	st	Z, r24
+                }
+            default:
+//			     PORTB=0xf0;
+		 break;
+          }
+ }
+ 22a:	0f 90       	pop	r0
+ 22c:	0f 90       	pop	r0
+ 22e:	cf 91       	pop	r28
+ 230:	df 91       	pop	r29
+ 232:	08 95       	ret
+
+00000234 <main>:
+
+//***********************************************************************************
+//主函数
+//***********************************************************************************
+int main()
+{  	
+ 234:	df 93       	push	r29
+ 236:	cf 93       	push	r28
+ 238:	cd b7       	in	r28, 0x3d	; 61
+ 23a:	de b7       	in	r29, 0x3e	; 62
+    IO_init();                //IO初始化
+ 23c:	0e 94 77 00 	call	0xee	; 0xee <IO_init>
+	PORTB=0xff;
+ 240:	e8 e3       	ldi	r30, 0x38	; 56
+ 242:	f0 e0       	ldi	r31, 0x00	; 0
+ 244:	8f ef       	ldi	r24, 0xFF	; 255
+ 246:	80 83       	st	Z, r24
+//	  PORTC=0x66;
+/*      LED_1=1;
+	  LED_2=1;
+	  LED_3=1;
+	  LED_4=1;*/
+	  keyScan();             //按键扫描
+ 248:	0e 94 8d 00 	call	0x11a	; 0x11a <keyScan>
+      keyHandle();           //按键处理
+ 24c:	0e 94 dc 00 	call	0x1b8	; 0x1b8 <keyHandle>
+ 250:	fb cf       	rjmp	.-10     	; 0x248 <main+0x14>
+
+00000252 <_exit>:
+ 252:	f8 94       	cli
+
+00000254 <__stop_program>:
+ 254:	ff cf       	rjmp	.-2      	; 0x254 <__stop_program>

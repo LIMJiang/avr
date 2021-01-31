@@ -1,0 +1,24 @@
+RAM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+resit                                                             0x0160       8
+time                                                              0x0168       2
+dis_buff                                                          0x016A       4
+
+EEPROM Allocation
+Variable                                                          Address   Size
+--------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                          Register  Size
+--------------------------------------------------------------------------------
+i                                                                 R4,R5        2
+posit                                                             R7           1
+point_on                                                          R2.0      1bit
+time_1s_ok                                                        R2.1      1bit
+time_counter                                                      R8,R9        2
+keyValue                                                          R6           1
+aa                                                                R11          1
+bb                                                                R10          1
+cc                                                                R13          1
+dd                                                                R12          1
